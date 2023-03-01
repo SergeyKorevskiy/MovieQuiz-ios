@@ -90,6 +90,7 @@ final class MovieQuizViewController: UIViewController {
       ]
   
   private var currentQuestionIndex: Int = 0
+  private var correctAnswers: Int = 0
   
   private func show(quiz step: QuizStepViewModel) {
     // здесь мы заполняем нашу картинку, текст и счётчик данными
@@ -98,8 +99,35 @@ final class MovieQuizViewController: UIViewController {
     textLabel.text = step.question
   }
 
+
+  // здесь мы показываем результат прохождения квиза:
   private func show(quiz result: QuizResultsViewModel) {
-    // здесь мы показываем результат прохождения квиза
+    
+    // создаём объекты всплывающего окна:
+      let alert = UIAlertController(
+          title: result.title,
+          message: result.text,
+          preferredStyle: .alert)
+      
+    // создаём для него кнопки с действиями
+      let action = UIAlertAction(title: result.buttonText, style: .default) { _ in
+          self.currentQuestionIndex = 0
+          
+        // скидываем счётчик правильных ответов
+        self.correctAnswers = 0
+        
+        
+          // заново показываем первый вопрос
+          let firstQuestion = self.questions[self.currentQuestionIndex]
+          let viewModel = self.convert(model: firstQuestion)
+          self.show(quiz: viewModel)
+      }
+      
+    // добавляем в алерт кнопки
+      alert.addAction(action)
+    
+    // показываем всплывающее окно
+      self.present(alert, animated: true, completion: nil)
   }
   
   
@@ -113,23 +141,53 @@ final class MovieQuizViewController: UIViewController {
   }
 
   private func showAnswerResult(isCorrect: Bool) {
-    if isCorrect == questions[currentQuestionIndex].correctAnswer{
-      textLabel.text = "ВЕРНО!"
+    if isCorrect {
+            correctAnswers += 1
+        }
+    
+    imageView.layer.masksToBounds = true // даём разрешение на рисование рамки
+    imageView.layer.borderWidth = 8 // толщина рамки
+    imageView.layer.cornerRadius = 6 // радиус скругления углов рамки
+    imageView.layer.borderColor = UIColor.white.cgColor
+    
+    imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
+    
+    
+    DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
+            self.showNextQuestionOrResults()
+      self.imageView.layer.borderColor = UIColor.ypBlack.cgColor
+        }
+  }
+  
+  private func showNextQuestionOrResults() {
+    if currentQuestionIndex == questions.count - 1 { // - 1 потому что индекс начинается с 0, а длинна массива — с 1
+      // показать результат квиза
+      let text = "Ваш результат: \(correctAnswers) из \(questions.count)"
+      let viewModel = QuizResultsViewModel(
+                 title: "Этот раунд окончен!",
+                 text: text,
+                 buttonText: "Сыграть ещё раз")
+             show(quiz: viewModel)
+      
     } else {
-      textLabel.text = "НЕВЕРНО!"
+  
+      currentQuestionIndex += 1 // увеличиваем индекс текущего урока на 1; таким образом мы сможем получить следующий урок
+      // показать следующий вопрос
+      let nextQuestion = questions[currentQuestionIndex]
+      let viewModel = convert(model: nextQuestion)
+      show(quiz: viewModel)
+      
     }
   }
+
   
     override func viewDidLoad() {
         super.viewDidLoad()
       
       let currentQuestion = questions[currentQuestionIndex]
       
-      
       show(quiz: convert(model: currentQuestion))
       
-      
-
     }
   
   override func viewWillAppear(_ animated: Bool) {
