@@ -4,15 +4,18 @@ final class MovieQuizViewController: UIViewController {
     // MARK: - Lifecycle
   
   
-  
+  // Авторское решение:
   @IBAction private func noButtonClicked(_ sender: UIButton) {
-      showAnswerResult(isCorrect: false)
-      currentQuestionIndex += 1
+    let currentQuestion = questions[currentQuestionIndex]
+     let givenAnswer = false
+     showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
   }
   
+  // Авторское решение:
   @IBAction private func yesButtonClicked(_ sender: UIButton) {
-    showAnswerResult(isCorrect: true)
-    currentQuestionIndex += 1
+    let currentQuestion = questions[currentQuestionIndex]
+        let givenAnswer = true
+        showAnswerResult(isCorrect: givenAnswer == currentQuestion.correctAnswer)
   }
   
   @IBOutlet private weak var counterLabel: UILabel!
