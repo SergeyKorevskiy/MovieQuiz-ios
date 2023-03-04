@@ -25,7 +25,7 @@ final class MovieQuizViewController: UIViewController {
   @IBOutlet  private weak var textLabel: UILabel!
 
   // ПОПЫТКА ВРУЧНУЮ ДОАВИТЬ КАСТОМНЫЕ ШРИФТЫ, вызывает ошибки
- // textLabel.font = UIFont(name: "YSDisplay-Bold", size: 150)
+  //textLabel.font = UIFont(name: "YSDisplay-Bold", size: 150)
   
   
   // для состояния "Вопрос задан"
