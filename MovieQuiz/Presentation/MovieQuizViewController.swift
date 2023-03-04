@@ -23,6 +23,9 @@ final class MovieQuizViewController: UIViewController {
   @IBOutlet private weak var imageView: UIImageView!
   
   @IBOutlet  private weak var textLabel: UILabel!
+
+  // ПОПЫТКА ВРУЧНУЮ ДОАВИТЬ КАСТОМНЫЕ ШРИФТЫ, вызывает ошибки
+ // textLabel.font = UIFont(name: "YSDisplay-Bold", size: 150)
   
   
   // для состояния "Вопрос задан"
@@ -44,7 +47,6 @@ final class MovieQuizViewController: UIViewController {
     let text: String
     let correctAnswer: Bool
   }
-
   
   private let questions: [QuizQuestion] = [
           QuizQuestion(
@@ -147,7 +149,7 @@ final class MovieQuizViewController: UIViewController {
     
     imageView.layer.masksToBounds = true // даём разрешение на рисование рамки
     imageView.layer.borderWidth = 8 // толщина рамки
-    imageView.layer.cornerRadius = 6 // радиус скругления углов рамки
+    imageView.layer.cornerRadius = 20 // радиус скругления углов рамки
     imageView.layer.borderColor = UIColor.white.cgColor
     
     imageView.layer.borderColor = isCorrect ? UIColor.ypGreen.cgColor : UIColor.ypRed.cgColor
@@ -183,6 +185,8 @@ final class MovieQuizViewController: UIViewController {
   
     override func viewDidLoad() {
         super.viewDidLoad()
+      
+      
       
       let currentQuestion = questions[currentQuestionIndex]
       
