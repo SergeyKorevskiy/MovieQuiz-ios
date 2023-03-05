@@ -20,8 +20,6 @@ final class MovieQuizViewController: UIViewController {
   @IBOutlet private weak var imageView: UIImageView!
   
   @IBOutlet  private weak var textLabel: UILabel!
-
-  
   
   // для состояния "Вопрос задан"
   struct QuizStepViewModel {
@@ -98,7 +96,6 @@ final class MovieQuizViewController: UIViewController {
     textLabel.text = step.question
   }
 
-
   // здесь мы показываем результат прохождения квиза:
   private func show(quiz result: QuizResultsViewModel) {
     
@@ -135,8 +132,6 @@ final class MovieQuizViewController: UIViewController {
           image: UIImage(named: model.image) ?? UIImage(), // распаковываем картинку
           question: model.text, // берём текст вопроса
           questionNumber: "\(currentQuestionIndex + 1)/\(questions.count)") // высчитываем номер вопроса
-    
-  //  UIImage(imageLiteralResourceName: model.image
   }
 
   private func showAnswerResult(isCorrect: Bool) {
