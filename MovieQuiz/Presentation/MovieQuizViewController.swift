@@ -3,6 +3,9 @@ import UIKit
  // 14.03.2023
 final class MovieQuizViewController: UIViewController {
   
+  override var preferredStatusBarStyle: UIStatusBarStyle {
+      return .lightContent
+  }
   
   @IBAction private func noButtonClicked(_ sender: UIButton) {
     let currentQuestion = questions[currentQuestionIndex]
