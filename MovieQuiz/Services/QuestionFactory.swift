@@ -7,9 +7,7 @@
 
 import Foundation
 
-// : QuestionFactoryProtocol - добавить протокол??
-
-class QuestionFactory {
+class QuestionFactory: QuestionFactoryProtocol {
 
   static private let quizQuestion: String = "Рейтинг этого фильма больше чем 6?"
   
