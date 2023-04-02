@@ -1,7 +1,7 @@
 import UIKit
 
 // 14.03.2023
-final class MovieQuizViewController: UIViewController {
+final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
   
   override var preferredStatusBarStyle: UIStatusBarStyle {
     return .lightContent
@@ -31,7 +31,7 @@ final class MovieQuizViewController: UIViewController {
   private var correctAnswers: Int = 0
   
   private let questionsAmount: Int = 10
-  private let questionFactory: QuestionFactoryProtocol = QuestionFactory()
+  private var questionFactory: QuestionFactoryProtocol?
   private var currentQuestion: QuizQuestion?
   
   private func show(quiz step: QuizStepViewModel) {
@@ -60,12 +60,7 @@ final class MovieQuizViewController: UIViewController {
       self.correctAnswers = 0
       
       // заново показываем первый вопрос
-      if let firstQuestion = self.questionFactory.requestNextQuestion() {
-          self.currentQuestion = firstQuestion
-          let viewModel = self.convert(model: firstQuestion)
-          
-          self.show(quiz: viewModel)
-      }
+      questionFactory?.requestNextQuestion()
     }
     
     // добавляем в алерт кнопки
@@ -121,26 +116,34 @@ final class MovieQuizViewController: UIViewController {
       
       currentQuestionIndex += 1 // увеличиваем индекс текущего урока на 1; таким образом мы сможем получить следующий урок
       // показать следующий вопрос
-      if let nextQuestion = questionFactory.requestNextQuestion() {
-          currentQuestion = nextQuestion
-          let viewModel = convert(model: nextQuestion)
-          
-          show(quiz: viewModel)
-      }
+      questionFactory?.requestNextQuestion()
       
     }
   }
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    
+    imageView.layer.cornerRadius = 20
+    questionFactory = QuestionFactory(delegate: self)
 
-    if let firstQuestion = questionFactory.requestNextQuestion() {
-        currentQuestion = firstQuestion
-        let viewModel = convert(model: firstQuestion)
-        show(quiz: viewModel)
-    }
-    
-    
+    questionFactory?.requestNextQuestion()
+  }
+  
+  // MARK: - QuestionFactoryDelegate
+  
+  func didReceiveNextQuestion(question: QuizQuestion?) {
+      guard let question = question else {
+          return
+      }
+      
+      currentQuestion = question
+      let viewModel = convert(model: question)
+      DispatchQueue.main.async { [weak self] in
+          self?.show(quiz: viewModel)
+      }
   }
   
 }
+
+
