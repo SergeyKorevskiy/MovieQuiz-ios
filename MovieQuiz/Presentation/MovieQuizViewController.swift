@@ -1,6 +1,6 @@
 import UIKit
 
-// 14.03.2023
+// 27.04.2023
 final class MovieQuizViewController: UIViewController, QuestionFactoryDelegate {
   
   override var preferredStatusBarStyle: UIStatusBarStyle {
